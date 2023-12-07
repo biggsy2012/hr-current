@@ -1,113 +1,296 @@
-import Image from 'next/image'
+"use client";
+import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+	const { data: session, status } = useSession();
+	const { toast } = useToast();
+	const formatDate = (date: Date) => {
+		const d = new Date(date);
+		const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
+		const mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
+		const da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
+		const ho = new Intl.DateTimeFormat("en", { hour: "2-digit" }).format(d);
+		const mi = new Intl.DateTimeFormat("en", { minute: "2-digit" }).format(d);
+		const se = new Intl.DateTimeFormat("en", { second: "2-digit" }).format(d);
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+		return `${da}-${mo}-${ye} - ${ho}:${mi}:${se}`;
+	};
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+	const checkmark = (
+		<svg
+			data-sanity-icon="checkmark-circle"
+			width="1em"
+			height="1em"
+			viewBox="0 0 25 25"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M9.5 12.1316L11.7414 14.5L16 10M20.5 12.5C20.5 16.9183 16.9183 20.5 12.5 20.5C8.08172 20.5 4.5 16.9183 4.5 12.5C4.5 8.08172 8.08172 4.5 12.5 4.5C16.9183 4.5 20.5 8.08172 20.5 12.5Z"
+				stroke="currentColor"
+				stroke-width="1.2"
+				stroke-linejoin="round"
+			></path>
+		</svg>
+	);
+	const formattedDate = formatDate(new Date());
+	console.log("status", status);
+	console.log("session", session);
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+	return (
+		<main className="flex flex-col items-center min-h-screen min-w-screen">
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			<br />
+			https://prod.liveshare.vsengsaas.visualstudio.com/join?8D5E9BDFCB61E86805DEBB945EC12A965E5F
+			<h1>NextHR</h1>
+			<p>Generated by create next app</p>
+			<p>session: {session?.user?.name}</p>
+			<p>status: {status}</p>
+			<Button
+				onClick={() => {
+					toast({
+						title: "Welcome" + " " + session?.user?.name?.split(" ")[0],
+						description:
+							session?.user?.name?.split(" ")[0] +
+							" clicked button @ " +
+							formattedDate,
+						status: "success",
+						duration: 5000,
+					});
+				}}
+			>
+				clickme
+			</Button>
+			{status === "loading" ? (
+				<Skeleton className="w-[45px] h-[45px] rounded-full bg-gray-800" />
+			) : (
+				<Avatar>
+					<AvatarImage src={session?.user?.image} />
+					<AvatarFallback>N-HR</AvatarFallback>
+				</Avatar>
+			)}
+			<br />
+			<br />
+			<br />
+			<br />
+			<svg
+				width="578"
+				height="486"
+				viewBox="0 0 578 486"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<g filter="url(#filter0_dddddd_1241_77)">
+					<g clip-path="url(#clip0_1241_77)">
+						<rect x="80" width="418" height="306" rx="12" fill="#1C2430"></rect>
+						<rect
+							width="418"
+							height="37"
+							transform="translate(80)"
+							fill="#1C2430"
+						></rect>
+						<circle cx="108" cy="28.5" r="7.5" stroke="#515E72"></circle>
+						<circle cx="132" cy="28.5" r="7.5" stroke="#515E72"></circle>
+						<circle cx="156" cy="28.5" r="7.5" stroke="#515E72"></circle>
+						<rect
+							x="112"
+							y="69"
+							width="312"
+							height="8"
+							rx="4"
+							fill="#384964"
+						></rect>
+						<rect
+							x="112"
+							y="109"
+							width="98"
+							height="8"
+							rx="4"
+							fill="#384964"
+						></rect>
+						<rect
+							x="112"
+							y="125"
+							width="218"
+							height="8"
+							rx="4"
+							fill="#384964"
+						></rect>
+						<rect
+							x="112"
+							y="141"
+							width="275"
+							height="8"
+							rx="4"
+							fill="#384964"
+						></rect>
+						<rect
+							x="112"
+							y="157"
+							width="259"
+							height="8"
+							rx="4"
+							fill="#384964"
+						></rect>
+						<rect
+							x="112"
+							y="197"
+							width="163"
+							height="8"
+							rx="4"
+							fill="#384964"
+						></rect>
+						<path
+							d="M112 237L119 241.5L112 246"
+							stroke="#CED2D9"
+							stroke-width="2"
+						></path>
+						<path d="M123 246H135" stroke="#CED2D9" stroke-width="2"></path>
+					</g>
+				</g>
+				<defs>
+					<filter
+						id="filter0_dddddd_1241_77"
+						x="0"
+						y="0"
+						width="578"
+						height="486"
+						filterUnits="userSpaceOnUse"
+						color-interpolation-filters="sRGB"
+					>
+						<feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+						<feColorMatrix
+							in="SourceAlpha"
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+							result="hardAlpha"
+						></feColorMatrix>
+						<feOffset dy="2.76726"></feOffset>
+						<feGaussianBlur stdDeviation="1.1069"></feGaussianBlur>
+						<feColorMatrix
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0562291 0"
+						></feColorMatrix>
+						<feBlend
+							mode="normal"
+							in2="BackgroundImageFix"
+							result="effect1_dropShadow_1241_77"
+						></feBlend>
+						<feColorMatrix
+							in="SourceAlpha"
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+							result="hardAlpha"
+						></feColorMatrix>
+						<feOffset dy="6.6501"></feOffset>
+						<feGaussianBlur stdDeviation="2.66004"></feGaussianBlur>
+						<feColorMatrix
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0807786 0"
+						></feColorMatrix>
+						<feBlend
+							mode="normal"
+							in2="effect1_dropShadow_1241_77"
+							result="effect2_dropShadow_1241_77"
+						></feBlend>
+						<feColorMatrix
+							in="SourceAlpha"
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+							result="hardAlpha"
+						></feColorMatrix>
+						<feOffset dy="12.5216"></feOffset>
+						<feGaussianBlur stdDeviation="5.00862"></feGaussianBlur>
+						<feColorMatrix
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
+						></feColorMatrix>
+						<feBlend
+							mode="normal"
+							in2="effect2_dropShadow_1241_77"
+							result="effect3_dropShadow_1241_77"
+						></feBlend>
+						<feColorMatrix
+							in="SourceAlpha"
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+							result="hardAlpha"
+						></feColorMatrix>
+						<feOffset dy="22.3363"></feOffset>
+						<feGaussianBlur stdDeviation="8.93452"></feGaussianBlur>
+						<feColorMatrix
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.119221 0"
+						></feColorMatrix>
+						<feBlend
+							mode="normal"
+							in2="effect3_dropShadow_1241_77"
+							result="effect4_dropShadow_1241_77"
+						></feBlend>
+						<feColorMatrix
+							in="SourceAlpha"
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+							result="hardAlpha"
+						></feColorMatrix>
+						<feOffset dy="41.7776"></feOffset>
+						<feGaussianBlur stdDeviation="16.711"></feGaussianBlur>
+						<feColorMatrix
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.143771 0"
+						></feColorMatrix>
+						<feBlend
+							mode="normal"
+							in2="effect4_dropShadow_1241_77"
+							result="effect5_dropShadow_1241_77"
+						></feBlend>
+						<feColorMatrix
+							in="SourceAlpha"
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+							result="hardAlpha"
+						></feColorMatrix>
+						<feOffset dy="100"></feOffset>
+						<feGaussianBlur stdDeviation="40"></feGaussianBlur>
+						<feColorMatrix
+							type="matrix"
+							values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+						></feColorMatrix>
+						<feBlend
+							mode="normal"
+							in2="effect5_dropShadow_1241_77"
+							result="effect6_dropShadow_1241_77"
+						></feBlend>
+						<feBlend
+							mode="normal"
+							in="SourceGraphic"
+							in2="effect6_dropShadow_1241_77"
+							result="shape"
+						></feBlend>
+					</filter>
+					<clipPath id="clip0_1241_77">
+						<rect x="80" width="418" height="306" rx="12" fill="white"></rect>
+					</clipPath>
+				</defs>
+			</svg>
+		</main>
+	);
 }
