@@ -1,11 +1,7 @@
 /** @format */
-
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import AzureAD from "next-auth/providers/azure-ad";
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { PrismaClient } from "@prisma/client";
 
 export const authOptions: NextAuthOptions = {
 	providers: [
@@ -16,9 +12,9 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	secret: process.env.NEXTAUTH_SECRET as string,
-	debug: true,
+	debug: true
 };
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export { handler as POST, handler as GET };
